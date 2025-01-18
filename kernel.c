@@ -33,17 +33,12 @@ typedef uint32_t size_t;
 
 extern char __bss[], __bss_end[], __stack_top[];
 
-void *memset(void *buf, char c, size_t n) {
-    uint8_t *p = (uint8_t *) buf;
-    while (n--)
-        *p++ = c;
-    return buf;
-}
-
 
 void kernel_main(void) {
-    printf("\n\nHello %s\n", "World!");
-    printf("1 + 2 = %d, %x\n", 1 + 2, 0x1234abcd);
+    memset(__bss, 0, (size_t) __bss_end - (size_t) __bss);
+
+    PANIC("booted!");
+    printf("unreachable here!\n");
 
     for (;;) {
         sbi_call('L', 0, 0, 0, 0, 0, 0, 1); // Loop marker
